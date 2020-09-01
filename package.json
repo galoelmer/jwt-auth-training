@@ -16,6 +16,8 @@
     "http-errors": "~1.6.3",
     "mongoose": "^5.10.2",
     "morgan": "~1.9.1",
-    "tailwindcss": "^1.7.6"
+    "node-cache": "^5.1.2",
+    "tailwindcss": "^1.7.6",
+    "validator": "^13.1.1"
   }
 }

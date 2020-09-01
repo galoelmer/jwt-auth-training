@@ -1,8 +1,8 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
-var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var mongoose = require('mongoose');
 
 var homeRoute = require('./routes/home');
 var cardsRoute = require('./routes/cards');
@@ -16,9 +16,23 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// database connection
+const dbURI =
+  'mongodb+srv://dbUser:test123@cluster0.zche8.gcp.mongodb.net/jwtDB?retryWrites=true&w=majority';
+mongoose
+  .connect(dbURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  })
+  .then((result) => {
+    console.log('Successful connection to mongoDb');
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 // routes
 app.use('/', homeRoute);
