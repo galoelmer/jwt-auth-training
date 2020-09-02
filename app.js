@@ -4,6 +4,7 @@ var path = require('path');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 var cookieParser = require('cookie-parser');
+const { requireAuth } = require('./middleware/authMiddleware');
 
 var homeRoute = require('./routes/home');
 var cardsRoute = require('./routes/cards');
@@ -38,7 +39,7 @@ mongoose
 
 // routes
 app.use('/', homeRoute);
-app.use('/cards', cardsRoute);
+app.use('/cards', requireAuth, cardsRoute);
 app.use(authRoutes);
 
 // catch 404 and forward to error handler
