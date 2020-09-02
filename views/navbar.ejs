@@ -16,6 +16,14 @@
    </a>
   </div>
     <div>
+      <% if (user) { %>
+      <span class='mr-6 text-white'>Welcome, <span class='font-semibold'><%= user.email %></span></span>
+      <a
+        href="/logout"
+        class="inline-block text-sm px-4 py-2 leading-none border rounded text-white bg-red-400 hover:bg-red-600 mt-4 lg:mt-0"
+        >Logout</a
+      >
+      <% } else { %>
       <a
         href="/login"
         class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0"
@@ -26,11 +34,7 @@
         class="inline-block text-sm px-4 py-2 leading-none border rounded text-teal-500 border-transparent bg-white hover:border-white hover:text-white hover:bg-purple-500 mt-4 lg:mt-0"
         >Signup</a
       >
-      <a
-        href="/logout"
-        class="inline-block text-sm px-4 py-2 leading-none border rounded text-white bg-red-400 hover:bg-red-600 mt-4 lg:mt-0"
-        >Logout</a
-      >
+      <% } %>
     </div>
   </div>
 </nav>

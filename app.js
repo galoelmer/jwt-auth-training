@@ -4,7 +4,7 @@ var path = require('path');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 var cookieParser = require('cookie-parser');
-const { requireAuth } = require('./middleware/authMiddleware');
+const { requireAuth, checkUser } = require('./middleware/authMiddleware');
 
 var homeRoute = require('./routes/home');
 var cardsRoute = require('./routes/cards');
@@ -38,6 +38,7 @@ mongoose
   });
 
 // routes
+app.get('*', checkUser);
 app.use('/', homeRoute);
 app.use('/cards', requireAuth, cardsRoute);
 app.use(authRoutes);
