@@ -1,4 +1,6 @@
 const User = require('../models/User');
+var jwt = require('jsonwebtoken');
+const { create } = require('../models/User');
 
 // handel errors
 const handleErrors = (err) => {
@@ -17,31 +19,62 @@ const handleErrors = (err) => {
     });
     return errors;
   } else {
-    return { general: 'Something went wrong' };
+    return { error: err };
   }
 };
 
+// create token
+const maxAge = 3 * 24 * 60 * 60;
+const createToken = (id) => {
+  return jwt.sign({ id }, 'jwt-private-key', {
+    expiresIn: maxAge,
+  });
+};
+
+/*=============================================
+=             SIGNUP CONTROLLERS              =
+=============================================*/
+
+// Render Signup Page
 module.exports.signup_get = (req, res) => {
   res.render('signup');
 };
 
+// Post request: Signup user
 module.exports.signup_post = async (req, res) => {
   const { email, password } = req.body;
 
   try {
     const user = await User.create({ email, password });
-    res.status(201).json(user);
+    const token = createToken(user._id);
+    res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+    res.status(201).json({ user: user._id });
   } catch (err) {
     const errors = handleErrors(err);
     res.status(400).send({ errors });
   }
 };
 
+/*=============================================
+=              LOGIN CONTROLLERS              =
+=============================================*/
+
+// Render Login page
 module.exports.login_get = (req, res) => {
   res.render('login');
 };
 
+// Post request: Login user
 module.exports.login_post = async (req, res) => {
   const { email, password } = req.body;
-  console.log(email, password);
+
+  try {
+    const user = await User.login(email, password);
+    const token = createToken(user._id);
+    res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+    res.status(201).json({ user: user._id });
+  } catch (err) {
+    const errors = handleErrors(err);
+    res.status(400).send({ error: err.message });
+  }
 };

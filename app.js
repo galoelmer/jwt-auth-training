@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var logger = require('morgan');
 var mongoose = require('mongoose');
+var cookieParser = require('cookie-parser');
 
 var homeRoute = require('./routes/home');
 var cardsRoute = require('./routes/cards');
@@ -17,6 +18,7 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cookieParser());
 
 // database connection
 const dbURI =
